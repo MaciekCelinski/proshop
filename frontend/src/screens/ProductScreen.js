@@ -1,13 +1,29 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating";
-import products from "../products";
 
 // match comes from params.match and we can get an :id from a url because
 // in App.js we have a route path="/product/:id"
 
 const ProductScreen = ({ match }) => {
-	const product = products.find((p) => p._id === match.params.id);
+	const [product, setProduct] = useState({});
+
+	useEffect(() => {
+		const fetchProduct = async () => {
+			// if we do http://localhost:5000/api/products --> we get cors error
+			// co we add a proxy in package.json in frontend after the name
+			const { data } = await axios.get(
+				`/api/products/${match.params.id}`
+			);
+			setProduct(data);
+		};
+
+		fetchProduct();
+	}, [match]);
+
+	// const product = products.find((p) => p._id === match.params.id);
 	// console.log(product);
 	return (
 		<>
@@ -24,10 +40,12 @@ const ProductScreen = ({ match }) => {
 							<h3>{product.name}</h3>
 						</ListGroup.Item>
 						<ListGroup.Item>
-							<Rating
-								value={product.rating}
-								text={`${product.numReviews} reviews`}
-							/>
+							{product.rating && (
+								<Rating
+									value={product.rating}
+									text={`${product.numReviews} reviews`}
+								/>
+							)}
 						</ListGroup.Item>
 						<ListGroup.Item>Price: ${product.price}</ListGroup.Item>
 						<ListGroup.Item>
