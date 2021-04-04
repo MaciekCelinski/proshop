@@ -1,5 +1,5 @@
-const Cart = () => {
+const CartScreen = () => {
 	return <div>Cart</div>;
 };
 
-export default Cart;
+export default CartScreen;
