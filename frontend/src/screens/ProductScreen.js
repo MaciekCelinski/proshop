@@ -19,7 +19,7 @@ import { listProductDetails } from "../actions/productActions";
 // in App.js we have a route path="/product/:id"
 
 const ProductScreen = ({ history, match }) => {
-	const [qty, setQty] = useState(0);
+	const [qty, setQty] = useState(1);
 
 	const dispatch = useDispatch();
 
