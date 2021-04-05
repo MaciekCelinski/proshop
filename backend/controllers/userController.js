@@ -4,6 +4,8 @@ import User from "../models/UserModel.js";
 // import token generator
 import generateToken from "../utils/generateToken.js";
 
+
+
 // @desc    Auth user & get token
 // POST     /api/users/login
 // @access  public
@@ -28,4 +30,26 @@ const authUser = asyncHandler(async (req, res) => {
 	res.send({ email, password });
 });
 
-export { authUser };
+// @desc    Auth user profile
+// POST     /api/users/profile
+// @access  private
+
+const getUserProfile = asyncHandler(async (req, res) => {
+	// we get req.user from authMiddleware 
+	const user = await User.findById(req.user._id);
+
+	if(user){
+		return res.json({
+			_id: user._id,
+			name: user.name,
+			email: user.email,
+			isAdmin: user.isAdmin,
+		});
+	}else{
+		res.status(404)
+		throw new Error('User not found')
+	}
+	
+});
+
+export { authUser, getUserProfile };
