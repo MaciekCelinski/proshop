@@ -48,7 +48,8 @@ const registerUser = asyncHandler(async (req, res) => {
 	});
 
 	if (user) {
-		return res.status(201) // Created
+		return res
+			.status(201) // Created
 			.json({
 				_id: user._id,
 				name: user.name,
@@ -85,4 +86,34 @@ const getUserProfile = asyncHandler(async (req, res) => {
 	}
 });
 
-export { authUser, registerUser, getUserProfile };
+// @desc    Update user profile
+// PUT     	/api/users/profile
+// @access  private
+
+const updateUserProfile = asyncHandler(async (req, res) => {
+	// we get req.user from authMiddleware
+	const user = await User.findById(req.user._id);
+
+	if (user) {
+		user.name = req.body.name || user.name;
+		user.email = req.body.email || user.email;
+		if (req.body.password) {
+			user.password = req.body.password;
+		}
+
+		const updatedUser = await user.save();
+
+		return res.json({
+			_id: updatedUser._id,
+			name: updatedUser.name,
+			email: updatedUser.email,
+			isAdmin: updatedUser.isAdmin,
+			token: generateToken(updatedUser._id),
+		});
+	} else {
+		res.status(404); // Not found
+		throw new Error("User not found");
+	}
+});
+
+export { authUser, registerUser, getUserProfile, updateUserProfile };

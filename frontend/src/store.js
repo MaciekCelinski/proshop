@@ -8,8 +8,10 @@ import {
 } from "./reducers/productReducers.js";
 import { cartReducer } from "./reducers/cartReducers.js";
 import {
+	userDetailsReducer,
 	userLoginReducer,
 	userRegisterReducer,
+	userUpdateProfileReducer,
 } from "./reducers/userReducers.js";
 
 // it is like we have a cart variable ie. cart=[] and we use cartReducer to change it
@@ -20,6 +22,8 @@ const reducer = combineReducers({
 	cart: cartReducer,
 	userLogin: userLoginReducer,
 	userRegister: userRegisterReducer,
+	userDetails: userDetailsReducer,
+	userUpdateProfile: userUpdateProfileReducer 
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")
