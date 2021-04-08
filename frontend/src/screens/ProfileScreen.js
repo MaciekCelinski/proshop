@@ -32,7 +32,7 @@ const ProfileScreen = ({ history }) => {
 		} else {
 			if (!user.name || success) {
 				dispatch({type: USER_UPDATE_PROFILE_RESET})
-				dispatch(getUserDetails("profile"));
+				dispatch(getUserDetails("profile")); 
 			} else {
 				setName(user.name);
 				setEmail(user.email);
