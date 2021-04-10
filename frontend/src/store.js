@@ -13,6 +13,7 @@ import {
 	userRegisterReducer,
 	userUpdateProfileReducer,
 } from "./reducers/userReducers.js";
+import { orderCreateReducer } from "./reducers/orderReducers.js";
 
 // it is like we have a cart variable ie. cart=[] and we use cartReducer to change it
 
@@ -24,6 +25,7 @@ const reducer = combineReducers({
 	userRegister: userRegisterReducer,
 	userDetails: userDetailsReducer,
 	userUpdateProfile: userUpdateProfileReducer,
+	orderCreate: orderCreateReducer,
 });
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")

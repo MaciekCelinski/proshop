@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Row, Col, ListGroup, Image, Card, Button } from "react-bootstrap";
+import { Row, Col, ListGroup, Image, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 // components
-import Message from "../components/Message";
-import CheckoutSteps from "../components/CheckoutSteps";
+import Message from "../components/Message.js";
+import CheckoutSteps from "../components/CheckoutSteps.js";
+// actions
+import { createOrder } from "../actions/orderActions.js";
 
-const PlaceOrderScreen = () => {
+const PlaceOrderScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
 
 	// calculate prices
@@ -16,9 +18,39 @@ const PlaceOrderScreen = () => {
 	cart.shippingPrice = cart.itemsPrice > 100 ? 0 : 100;
 	cart.taxPrice = (0.15 * cart.itemsPrice).toFixed(2);
 
-	cart.totalPrice = Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice);
+	cart.totalPrice =
+		Number(cart.itemsPrice) +
+		Number(cart.shippingPrice) +
+		Number(cart.taxPrice);
 
-	const placeOrderHandler = () => {};
+	const dispatch = useDispatch();
+
+	const placeOrderHandler = () => {
+		dispatch(
+			createOrder({
+				orderItems: cart.cartItems,
+				shippingAddress: cart.shippingAddress,
+				paymentMethod: cart.paymentMethod,
+				itemsPrice: cart.itemsPrice,
+				shippingPrice: cart.shippingPrice,
+				taxPrice: cart.taxPrice,
+				totalPrice: cart.totalPrice,
+			})
+		);
+	};
+
+	// now we check if action have worked
+
+	// we check the state for the order
+	const orderCreate = useSelector((state) => state.orderCreate);
+	const { order, success, error } = orderCreate;
+	// and we use useEffect to check the changes for the abover
+	useEffect(async () => {
+		if (success) {
+			history.push(`/order/${order._id}`);
+		}
+		// eslint-disable-next-line
+	}, [history, success, order]);
 
 	return (
 		<>
@@ -105,6 +137,11 @@ const PlaceOrderScreen = () => {
 								<Col>Total</Col>
 								<Col>$ {cart.totalPrice}</Col>
 							</Row>
+						</ListGroup.Item>
+						<ListGroup.Item>
+							{error && (
+								<Message variant="danger">{error}</Message>
+							)}
 						</ListGroup.Item>
 						<ListGroup.Item>
 							<Button
