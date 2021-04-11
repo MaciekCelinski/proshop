@@ -40,10 +40,10 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @access private
 const getOrderById = asyncHandler(async (req, res) => {
 	// .populate will get the user name and email from User model
-	const order = (await Order.findById(req.params.id)).populate(
+	const order = (await Order.findById(req.params.id).populate(
 		"user",
 		"name email"
-	);
+	));
 
 	if (order) {
 		res.json(order);
