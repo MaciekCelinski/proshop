@@ -45,12 +45,12 @@ const PlaceOrderScreen = ({ history }) => {
 	const orderCreate = useSelector((state) => state.orderCreate);
 	const { order, success, error } = orderCreate;
 	// and we use useEffect to check the changes for the abover
-	useEffect(async () => {
-		if (success) {
+	useEffect(() => {
+		if (!order && success) {
 			history.push(`/order/${order._id}`);
 		}
 		// eslint-disable-next-line
-	}, [history, success, order]);
+	}, [history, order]);
 
 	return (
 		<>
