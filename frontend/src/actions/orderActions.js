@@ -8,6 +8,9 @@ import {
 	ORDER_PAY_FAIL,
 	ORDER_PAY_REQUEST,
 	ORDER_PAY_SUCCESS,
+	ORDER_LIST_MY_REQUEST,
+	ORDER_LIST_MY_SUCCESS,
+	ORDER_LIST_MY_FAIL,
 } from "../constants/orderConstants.js";
 
 import axios from "axios";
@@ -115,6 +118,41 @@ export const payOrder = (orderId, paymentResult) => async (
 		// }
 		dispatch({
 			type: ORDER_PAY_FAIL,
+			payload: message,
+		});
+	}
+};
+
+// we don't have to pass userID because backend knows who we are by the token
+export const listMyOrders = () => async (dispatch, getState) => {
+	try {
+		dispatch({ type: ORDER_LIST_MY_REQUEST });
+
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${userInfo.token}`,
+			},
+		};
+
+		const { data } = await axios.get("/api/orders/myorders", config);
+
+		dispatch({
+			type: ORDER_LIST_MY_SUCCESS,
+			payload: data,
+		});
+	} catch (error) {
+		const message =
+			error.response && error.response.data.message
+				? error.response.data.message
+				: error.message;
+
+		dispatch({
+			type: ORDER_LIST_MY_FAIL,
 			payload: message,
 		});
 	}
