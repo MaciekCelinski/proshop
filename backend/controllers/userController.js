@@ -169,6 +169,7 @@ const getUser = asyncHandler(async (req, res) => {
 // @access  private/admin
 
 const updateUser = asyncHandler(async (req, res) => {
+	console.log("req.user: ", req.user);
 	const user = await User.findById(req.params.id);
 
 	if (user) {
