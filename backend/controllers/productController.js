@@ -43,4 +43,65 @@ const deleteProduct = asyncHandler(async (req, res) => {
 	}
 });
 
-export { getProducts, getProductById, deleteProduct };
+// CREATE product
+// @access private/admin
+// @route POST /api/products
+
+const createProduct = asyncHandler(async (req, res) => {
+	const product = new Product({
+		name: "Dell Alienware",
+		price: 0,
+		user: req.user._id,
+		image: "/images/alienware.jpg",
+		brand: "Dell",
+		category: "laptops",
+		countInStock: 0,
+		numReviews: 0,
+		description: "Gaming laptop",
+	});
+
+	const createProduct = await product.save();
+	res.status(201).json(createProduct);
+});
+
+// UPDATE product
+// @access private/admin
+// @route PUT /api/products/:id
+
+const updateProduct = asyncHandler(async (req, res) => {
+	const {
+		name,
+		image,
+		brand,
+		category,
+		description,
+		price,
+		countInStock,
+	} = req.body;
+
+	const product = await Product.findById(req.params.id);
+
+	if (product) {
+		product.name = name;
+		product.price = price;
+		product.image = image;
+		product.brand = brand;
+		product.category = category;
+		product.description = description;
+		product.countInStock = countInStock;
+
+		const updatedProduct = await product.save();
+		res.json(updatedProduct);
+	} else {
+		res.status(404);
+		throw new Error("Product not found");
+	}
+});
+
+export {
+	getProducts,
+	getProductById,
+	deleteProduct,
+	createProduct,
+	updateProduct,
+};
