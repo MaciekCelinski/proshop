@@ -25,6 +25,7 @@ import {
 	orderDetailsReducer,
 	orderListMyReducer,
 	orderPayReducer,
+	orderDeliverReducer,
 } from "./reducers/orderReducers.js";
 
 // it is like we have a cart variable ie. cart=[] and we use cartReducer to change it
@@ -40,6 +41,7 @@ const reducer = combineReducers({
 	orderCreate: orderCreateReducer,
 	orderDetails: orderDetailsReducer,
 	orderPay: orderPayReducer,
+	orderDeliver: orderDeliverReducer,
 	orderListMy: orderListMyReducer,
 	orderList: orderListReducer,
 	userList: userListReducer,

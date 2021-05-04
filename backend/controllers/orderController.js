@@ -77,11 +77,30 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 	}
 });
 
+// UPDATE /api/orders/:id/deliver => UPDATE ORDER to "delivered"
+// @access private
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+	// .populate will get the user name and email from User model
+	const order = await Order.findById(req.params.id);
+
+	if (order) {
+		order.isDelivered = true
+		order.deliveredAt = Date.now()
+
+		const updatedOrder = await order.save();
+
+		res.json(updatedOrder);
+	} else {
+		res.status(404);
+		throw new Error("Order not found");
+	}
+});
+
 // GET /api/orders/myorders => GET logged in user ORDERs
 // @access private
 
 const getMyOrders = asyncHandler(async (req, res) => {
-	console.log('hello')
+	console.log("hello");
 	try {
 		console.log("req:", req);
 		const orders = await Order.find({ user: req.user._id });
@@ -97,7 +116,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 
 const getOrders = asyncHandler(async (req, res) => {
 	try {
-		const orders = await Order.find({}).populate('user', 'id name');
+		const orders = await Order.find({}).populate("user", "id name");
 		res.json(orders);
 	} catch (error) {
 		res.status(404);
@@ -105,4 +124,11 @@ const getOrders = asyncHandler(async (req, res) => {
 	}
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders };
+export {
+	addOrderItems,
+	getOrderById,
+	updateOrderToPaid,
+	updateOrderToDelivered,
+	getMyOrders,
+	getOrders,
+};

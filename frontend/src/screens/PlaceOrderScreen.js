@@ -8,7 +8,7 @@ import CheckoutSteps from "../components/CheckoutSteps.js";
 // actions
 import { createOrder } from "../actions/orderActions.js";
 // constants
-import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+// import { ORDER_CREATE_RESET } from '../constants/orderConstants'
 import { USER_DETAILS_RESET } from '../constants/userConstants'
 
 const PlaceOrderScreen = ({ history }) => {
