@@ -92,4 +92,17 @@ const getMyOrders = asyncHandler(async (req, res) => {
 	}
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
+// GET /api/orders/ => GET all aorders
+// @access private
+
+const getOrders = asyncHandler(async (req, res) => {
+	try {
+		const orders = await Order.find({}).populate('user', 'id name');
+		res.json(orders);
+	} catch (error) {
+		res.status(404);
+		throw new Error("Order not found");
+	}
+});
+
+export { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders, getOrders };

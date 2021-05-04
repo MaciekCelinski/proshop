@@ -7,9 +7,18 @@ import Message from "../components/Message.js";
 import CheckoutSteps from "../components/CheckoutSteps.js";
 // actions
 import { createOrder } from "../actions/orderActions.js";
+// constants
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+import { USER_DETAILS_RESET } from '../constants/userConstants'
 
 const PlaceOrderScreen = ({ history }) => {
 	const cart = useSelector((state) => state.cart);
+
+	if (!cart.shippingAddress.address) {
+		history.push('/shipping')
+	  } else if (!cart.paymentMethod) {
+		history.push('/payment')
+	  }
 
 	// calculate prices
 	cart.itemsPrice = cart.cartItems
@@ -46,11 +55,13 @@ const PlaceOrderScreen = ({ history }) => {
 	const { order, success, error } = orderCreate;
 	// and we use useEffect to check the changes for the abover
 	useEffect(() => {
-		if (!order && success) {
+		if (success) {
 			history.push(`/order/${order._id}`);
+			dispatch({ type: USER_DETAILS_RESET })
+			// dispatch({ type: ORDER_CREATE_RESET })
 		}
 		// eslint-disable-next-line
-	}, [history, order]);
+	}, [history, success]);
 
 	return (
 		<>
